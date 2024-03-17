@@ -49,7 +49,7 @@ startBtn.addEventListener("click", (event) => {
  
 
     const timer = convertMs(difference); // конвертуємо час
-    console.log(timer);
+    // console.log(timer);
     clockFace[0].innerText = timer.days.toString().padStart(2, "0"); // відмальовуємо в інтерфейс елементів ДОМ,як значення об'єкта таймер,зводячи до стрінгу та з нулем попереду
     clockFace[1].innerText = timer.hours.toString().padStart(2, "0");
     clockFace[2].innerText = timer.minutes.toString().padStart(2, "0");
