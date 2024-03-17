@@ -6,12 +6,12 @@ import "izitoast/dist/css/iziToast.min.css";
 
 const inputDateTimePicker = document.getElementById("datetime-picker");
 const startBtn = document.querySelector("[data-start]");
-const timerValues = document.querySelector(".timer .value")
+const clockFace = document.querySelectorAll(".value")
 
 let userSelectedDate = null;
-// let initTime = new Date();
 let intervalId = null;
-
+startBtn.disabled = true;
+ 
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -19,31 +19,43 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     userSelectedDate = selectedDates[0];
+    if (userSelectedDate < Date.now()) {
+      iziToast.error({
+        position: "topRight",
+        message: "Please choose a date in the future",
+      });
+      startBtn.disabled = true;
+    }
+    else { 
+      startBtn.disabled = false;
+      }
   },
 };
 
 flatpickr(inputDateTimePicker, options);
 
-startBtn.addEventListener("click", () => { 
+startBtn.addEventListener("click", (event) => { 
   intervalId = setInterval(() => {
-        const currentTime = Date.now();
+    const currentTime = Date.now();
     const difference = userSelectedDate - currentTime;
-    const time = convertMs(difference);
-    console.log(time);
-    // timerValues.textContent = time; ПОКА НЕ РАБОТАЕТ!!!! 
-    // console.log(timerValues);
-    if (difference < 1000) clearInterval(intervalId);
+       event.preventDefault();
+    startBtn.disabled = true;
+    inputDateTimePicker.disabled = true;
+    if (difference < 1000) {
+      startBtn.disabled = true;
+     inputDateTimePicker.disabled = false;
+      clearInterval(intervalId);
+    }
  
-  }, 1000);
 
-
+    const timer = convertMs(difference); // конвертуємо час
+    console.log(timer);
+    clockFace[0].innerText = timer.days.toString().padStart(2, "0"); // відмальовуємо в інтерфейс елементів ДОМ,як значення об'єкта таймер,зводячи до стрінгу та з нулем попереду
+    clockFace[1].innerText = timer.hours.toString().padStart(2, "0");
+   clockFace[2].innerText = timer.minutes.toString().padStart(2, "0");
+    clockFace[3].innerText = timer.seconds .toString().padStart(2, "0");
+     }, 1000);
 })
-
-
-
-
-
-
 
 
 function convertMs(ms) {
@@ -64,7 +76,3 @@ function convertMs(ms) {
 
   return { days, hours, minutes, seconds };
 }
-
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
