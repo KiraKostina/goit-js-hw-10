@@ -38,7 +38,7 @@ startBtn.addEventListener("click", (event) => {
   intervalId = setInterval(() => {
     const currentTime = Date.now();
     const difference = userSelectedDate - currentTime;
-       event.preventDefault();
+    event.preventDefault();
     startBtn.disabled = true;
     inputDateTimePicker.disabled = true;
     if (difference < 1000) {
@@ -52,7 +52,7 @@ startBtn.addEventListener("click", (event) => {
     console.log(timer);
     clockFace[0].innerText = timer.days.toString().padStart(2, "0"); // відмальовуємо в інтерфейс елементів ДОМ,як значення об'єкта таймер,зводячи до стрінгу та з нулем попереду
     clockFace[1].innerText = timer.hours.toString().padStart(2, "0");
-   clockFace[2].innerText = timer.minutes.toString().padStart(2, "0");
+    clockFace[2].innerText = timer.minutes.toString().padStart(2, "0");
     clockFace[3].innerText = timer.seconds .toString().padStart(2, "0");
      }, 1000);
 })
